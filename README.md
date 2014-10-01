@@ -1,4 +1,5 @@
 Login as root and create an admin user (this is the user you will run the reminder of this install as):
+```
 USER=<user>
 addgroup $USER
 useradd -s /bin/bash -m -d /home/$USER -c "Admin user" -g $USER -G sudo $USER
@@ -8,10 +9,12 @@ cp -r /root/.ssh/ /home/$USER/ && chown -R $USER:$USER /home/mickem/.ssh
 rm -rf /root/.ssh
 # Lastly set the password
 passwd $USER
-
+```
 
 Login as <user>
+```
 git clone <repo>
 cd <repo>
 ./install_puppet.sh
 sudo puppet apply  --modulepath=/usr/share/puppet/modules:./modules --templatedir templates server.pp
+```
