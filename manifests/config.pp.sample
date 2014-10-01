@@ -1,0 +1,28 @@
+
+class config {
+	$mail_server_name = "MY.FQDN.COM"
+	$generate_certificate = "true"
+	$files = "./files"
+	$memcache_memory = "128m"
+
+	if $generate_certificate == "true" {
+		$certificate = "ssl-cert-snakeoil.pem"
+		$certificate_key = "ssl-cert-snakeoil.key"
+	} else {
+		$certificate = "my-seed-cert.pem"
+		$certificate_key = "my-seed-cert.key"
+	}
+		
+	$maildb_user = 'mail'
+	$maildb_name = 'mail'
+	$maildb_pwd = get_password("/root/.mail.pwd")
+	
+	$mailadmin_user = "admin@$mail_server_name"
+	$mailadmin_pwd = get_password("/root/.mailadmin.pwd")
+	
+	
+	$vimbadmin_salt1 = get_password("/root/.vimbadmin_salt1.pwd", 64)
+	$vimbadmin_salt2 = get_password("/root/.vimbadmin_salt2.pwd", 64)
+	$vimbadmin_salt3 = get_password("/root/.vimbadmin_salt3.pwd", 64)
+	
+}

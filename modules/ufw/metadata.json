@@ -1,0 +1,40 @@
+{
+  "name": "attachmentgenie-ufw",
+  "author": "Eivind Uggedal <eivind@uggedal.com>",
+  "description": "Module for configuring UFW (Uncomplicated Firewall).\n\nTested on Debian GNU/Linux 6.0 Squeeze and Ubuntu 12.04 LTS with Puppet 2.7. \nPatches for other operating systems are welcome.",
+  "license": "MIT License",
+  "project_page": "https://github.com/attachmentgenie/puppet-module-ufw",
+  "source": "git://github.com/attachmentgenie/puppet-module-ufw.git",
+  "summary": "Puppet UFW Module",
+  "version": "1.4.9",
+  "checksums": {
+    "Gemfile": "0eb174acb6718c3d7d515893aef1452a",
+    "LICENSE": "2d9c14720c9adef6ab3197a70adb690c",
+    "Modulefile": "1d0662be8322eb394cd304dd5b0f4a93",
+    "README.md": "16427e3fa50477f87cf916120e5be0e6",
+    "Rakefile": "baf47607779e5dce1c5285d77b0afd6d",
+    "manifests/allow.pp": "8725154b48614413d24ce602d5888b36",
+    "manifests/deny.pp": "a3cbb710835d6569d0fcc12f98551b1b",
+    "manifests/init.pp": "0680cb300100b3fadf2608ce7e75c297",
+    "manifests/limit.pp": "855822cef8dc073ab5927ae41ddd8c7f",
+    "manifests/logging.pp": "e8bb784e19fc4702f10f967ff868bb5c",
+    "manifests/reject.pp": "97a0dfc0f516d3a7d94db68198350526",
+    "spec/defines/ufw__allow_spec.rb": "db24aeef98d3fbb0bfdd7c570d4e0ace",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
+    "tests/allow.pp": "67c72f8625c3816c07d1fbd3b858b8cd",
+    "tests/deny.pp": "c38f8ba2d445711420b40149f816e81b",
+    "tests/init.pp": "5eec85a0f0d350a5b76d42cbcf16794c",
+    "tests/limit.pp": "99adc363b918167405a997c0cd1adaca",
+    "tests/reject.pp": "5cb366f16ec410665c912d37ee9d5731"
+  },
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=2.2.1"
+    }
+  ],
+  "types": [
+
+  ]
+}

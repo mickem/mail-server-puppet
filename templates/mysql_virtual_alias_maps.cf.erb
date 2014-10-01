@@ -1,0 +1,5 @@
+user = <%= @maildb_user %>
+password = <%= @maildb_pwd %>
+hosts = 127.0.0.1
+dbname = <%= @maildb_name %>
+query = SELECT goto FROM alias WHERE address = '%s' AND active = '1'

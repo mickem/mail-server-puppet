@@ -1,0 +1,8 @@
+user = <%= @maildb_user %>
+password = <%= @maildb_pwd %>
+hosts = 127.0.0.1
+dbname = <%= @maildb_name %>
+table = mailbox
+select_field = CONCAT(domain, '/', local_part)
+where_field = username
+additional_conditions = and active = '1'

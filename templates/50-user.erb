@@ -1,0 +1,32 @@
+use strict;
+
+#
+# Place your configuration directives here.  They will override those in
+# earlier files.
+#
+# See /usr/share/doc/amavisd-new/ for documentation and examples of
+# the directives you can use in this file
+#
+
+# Three concurrent processes. This should fit into the RAM available on an
+# AWS micro instance. This has to match the number of processes specified
+# for Amavis in /etc/postfix/master.cf.
+$max_servers  = 3;
+  
+# Add spam info headers if at or above that level - this ensures they
+# are always added.
+$sa_tag_level_deflt  = -9999;
+ 
+# Check the database to see if mail is for local delivery, and thus
+# should be spam checked.
+@lookup_sql_dsn = (
+    ['DBI:mysql:database=<%= @maildb_name %>;host=127.0.0.1;port=3306',
+     '<%= @maildb_user %>',
+     '<%= @maildb_pwd %>']);
+$sql_select_policy = 'SELECT domain from domain WHERE CONCAT("@",domain) IN (%k)';
+ 
+# Uncomment to bump up the log level when testing.
+# $log_level = 2;
+
+#------------ Do not modify anything below this line -------------
+1;  # ensure a defined return
