@@ -36,7 +36,6 @@ cd https://github.com/mickem/mail-server-puppet.git
 cd mail-server-puppet
 # Edit configuration (manifests/config.pp)
 ./start.sh
-sudo puppet apply  --modulepath=/usr/share/puppet/modules:./modules --templatedir templates server.pp
 ```
 
 If you want to re-run puppet use:
