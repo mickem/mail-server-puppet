@@ -136,6 +136,8 @@ virtual_gid_maps = static:8
 virtual_alias_maps = mysql:/etc/postfix/mysql_virtual_alias_maps.cf
 # This is for domain lookups.
 virtual_mailbox_domains = mysql:/etc/postfix/mysql_virtual_domains_maps.cf
+# Remove Nis lookups to get rid of nis warning.
+alias_maps = hash:/etc/aliases
  
 # Integration with other packages
 # ---------------------------------------
