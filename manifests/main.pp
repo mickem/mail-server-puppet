@@ -1,76 +1,76 @@
 
 class packages {
 	# nginx (www)
-	package { "apache2": ensure => absent }
+	package { "apache2": 		ensure => absent }
 	->
-	package { "nginx": ensure => present }
+	package { "nginx": 			ensure => present }
 	->
-	package { "apache2-utils": ensure => present }
+	package { "apache2-utils": 	ensure => present }
 	
 	# php
-	package { "php5-fpm": ensure => present }
-	package { "php-apc": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-mcrypt": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-memcache": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-curl": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-gd": ensure => present, require => Package["php5-fpm"], }
+	package { "php5-fpm": 		ensure => present }
+	package { "php-apc": 		ensure => present, require => Package["php5-fpm"], }
+	package { "php5-mcrypt": 	ensure => present, require => Package["php5-fpm"], }
+	package { "php5-memcache": 	ensure => present, require => Package["php5-fpm"], }
+	package { "php5-curl": 		ensure => present, require => Package["php5-fpm"], }
+	package { "php5-gd": 		ensure => present, require => Package["php5-fpm"], }
 	package { "php-xml-parser": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-mysql": ensure => present, require => Package["php5-fpm"], }
-	package { "php5-imap": ensure => present, require => Package["php5-fpm"], }
+	package { "php5-mysql": 	ensure => present, require => Package["php5-fpm"], }
+	package { "php5-imap": 		ensure => present, require => Package["php5-fpm"], }
 	
 	package { "mariadb-client": ensure => absent }
 	package { "mariadb-server": ensure => present }
 
 	# postfix (smtp)
-	package { "postfix": ensure => present }
-	package { "postfix-mysql": ensure => present }
+	package { "postfix": 		ensure => present }
+	package { "postfix-mysql": 	ensure => present }
 	
-	package { "postgrey": ensure => present }
-	package { "amavis": ensure => present }
-	package { "clamav": ensure => present }
-	package { "clamav-daemon": ensure => present }
-	package { "spamassassin": ensure => present }
+	package { "postgrey": 		ensure => present }
+	package { "amavis": 		ensure => present }
+	package { "clamav": 		ensure => present }
+	package { "clamav-daemon": 	ensure => present }
+	package { "spamassassin": 	ensure => present }
 	
 	# Random stuff needed by spam/virtus scanners
-	package { "pyzor": ensure => present }
-	package { "razor": ensure => present }
-	package { "arj": ensure => present }
-	package { "cabextract": ensure => present }
-	package { "lzop": ensure => present }
-	package { "nomarch": ensure => present }
-	package { "p7zip-full": ensure => present }
-	package { "ripole": ensure => present }
-	package { "rpm2cpio": ensure => present }
-	package { "tnef": ensure => present }
-	package { "unzip": ensure => present }
-	package { "unrar-free": ensure => present }
-	package { "zip": ensure => present }
-	package { "zoo": ensure => present }
+	package { "pyzor": 			ensure => present }
+	package { "razor": 			ensure => present }
+	package { "arj": 			ensure => present }
+	package { "cabextract": 	ensure => present }
+	package { "lzop": 			ensure => present }
+	package { "nomarch": 		ensure => present }
+	package { "p7zip-full": 	ensure => present }
+	package { "ripole": 		ensure => present }
+	package { "rpm2cpio": 		ensure => present }
+	package { "tnef": 			ensure => present }
+	package { "unzip": 			ensure => present }
+	package { "unrar-free": 	ensure => present }
+	package { "zip": 			ensure => present }
+	package { "zoo": 			ensure => present }
 	
 	
 	# Dovecot (imap)
-	package { "dovecot-core": ensure => present }
-	package { "dovecot-imapd": ensure => present }
-	package { "dovecot-lmtpd": ensure => present }
-	package { "dovecot-mysql": ensure => present }
-	package { "dovecot-sieve": ensure => present }
-	package { "dovecot-managesieved": ensure => present }
+	package { "dovecot-core": 			ensure => present }
+	package { "dovecot-imapd": 			ensure => present }
+	package { "dovecot-lmtpd": 			ensure => present }
+	package { "dovecot-mysql": 			ensure => present }
+	package { "dovecot-sieve": 			ensure => present }
+	package { "dovecot-managesieved": 	ensure => present }
 
 	# ssl helpers to make dummy certs
-	package { "ssl-cert": ensure => present }
+	package { "ssl-cert": 		ensure => present }
 
 	# mem cache (used by roundcube)
-	package { "memcached": ensure => present }
+	package { "memcached": 		ensure => present }
 
-	package { "git-core": ensure => present }
-	package { "rsyslog": ensure => present }
+	package { "git-core": 		ensure => present }
+	package { "rsyslog": 		ensure => present }
 	
 	# Roundcube
 	
-	package { "roundcube": ensure => present }
-	package { "roundcube-mysql": ensure => present }
-	package { "roundcube-plugins": ensure => present }
-	package { "roundcube-plugins-extra": ensure => present }
+	package { "roundcube": 					ensure => present }
+	package { "roundcube-mysql": 			ensure => present }
+	package { "roundcube-plugins": 			ensure => present }
+	package { "roundcube-plugins-extra": 	ensure => present }
 	
 	# Update before
 	exec { "apt-update":
@@ -241,9 +241,10 @@ class make_certificate {
 
 class nginx_config {
 	include config
-	$certificate = $config::certificate
-	$certificate_key = $config::certificate_key
-	$mail_server_name = $config::mail_server_name
+
+	$certificate 		= $config::certificate
+	$certificate_key 	= $config::certificate_key
+	$mail_server_name 	= $config::mail_server_name
 
 	file { "/etc/nginx/sites-available/default":
 		ensure	=> present,
@@ -257,7 +258,9 @@ class nginx_config {
 }
 class memcahe_config {
 	include config
+
 	$memcache_memory = $config::memcache_memory
+
 	file_line { 'memcached memory':
 	  path  => '/etc/memcached.conf',
 	  line  => "-m $memcache_memory",
@@ -269,9 +272,10 @@ class memcahe_config {
 
 class configure_maildb {
 	include config
-	$maildb_user = $config::maildb_user
-	$maildb_pwd = $config::maildb_pwd
-	$maildb_name = $config::maildb_name
+
+	$maildb_user 	= $config::maildb_user
+	$maildb_pwd 	= $config::maildb_pwd
+	$maildb_name 	= $config::maildb_name
 	
 	Exec {
 		logoutput => "on_failure",
@@ -293,20 +297,20 @@ class configure_maildb {
 
 class configure_webadmin {
 	include config
-	$vimbadmin_salt1 = $config::vimbadmin_salt1
-	$vimbadmin_salt2 = $config::vimbadmin_salt2
-	$vimbadmin_salt3 = $config::vimbadmin_salt3
+	$vimbadmin_salt1 	= $config::vimbadmin_salt1
+	$vimbadmin_salt2 	= $config::vimbadmin_salt2
+	$vimbadmin_salt3 	= $config::vimbadmin_salt3
 
-	$maildb_user = $config::maildb_user
-	$maildb_pwd = $config::maildb_pwd
-	$maildb_name = $config::maildb_name
+	$maildb_user 		= $config::maildb_user
+	$maildb_pwd 		= $config::maildb_pwd
+	$maildb_name 		= $config::maildb_name
 	
-	$mailadmin_user = $config::mailadmin_user
-	$mailadmin_pwd = $config::mailadmin_pwd
+	$mailadmin_user 	= $config::mailadmin_user
+	$mailadmin_pwd 		= $config::mailadmin_pwd
 
-	$certificate = $config::certificate
-	$certificate_key = $config::certificate_key
-	$mail_server_name = $config::mail_server_name
+	$certificate 		= $config::certificate
+	$certificate_key 	= $config::certificate_key
+	$mail_server_name 	= $config::mail_server_name
 
 	Exec {
 		logoutput => "on_failure",
@@ -445,9 +449,11 @@ class configure_webadmin {
 }
 
 class restore_maildb_backup {
-	$files = $config::files
-	$restore_maildb_backup = $config::restore_maildb_backup
-	$maildb_name = $config::maildb_name
+	include config
+
+	$files 					= $config::files
+	$restore_maildb_backup 	= $config::restore_maildb_backup
+	$maildb_name 			= $config::maildb_name
 
 	if $restore_maildb_backup == "true" {
 		file { "/tmp/domain.csv":
@@ -492,15 +498,15 @@ class restore_maildb_backup {
 class configure_mail {
 	include config
 	
-	$maildb_user = $config::maildb_user
-	$maildb_pwd = $config::maildb_pwd
-	$maildb_name = $config::maildb_name
+	$maildb_user 		= $config::maildb_user
+	$maildb_pwd 		= $config::maildb_pwd
+	$maildb_name 		= $config::maildb_name
 	
-	$certificate = $config::certificate
-	$certificate_key = $config::certificate_key
+	$certificate 		= $config::certificate
+	$certificate_key 	= $config::certificate_key
 	
-	$mailadmin_user = $config::mailadmin_user
-	$mailadmin_pwd = $config::mailadmin_pwd
+	$mailadmin_user 	= $config::mailadmin_user
+	$mailadmin_pwd 		= $config::mailadmin_pwd
 
 	file { "/etc/rsyslog.d/33-dovecot.conf":
 		ensure	=> present,
@@ -508,8 +514,6 @@ class configure_mail {
 		require	=> Package["rsyslog"],
 		notify  => Service["rsyslog"],
 	}
-	
-	
 	
 	group { "mail":
 		ensure => present,
@@ -664,9 +668,10 @@ class chown_dovecot_config {
 
 class configure_spamav {
 	include config
-	$maildb_user = $config::maildb_user
-	$maildb_pwd = $config::maildb_pwd
-	$maildb_name = $config::maildb_name
+
+	$maildb_user 	= $config::maildb_user
+	$maildb_pwd 	= $config::maildb_pwd
+	$maildb_name 	= $config::maildb_name
 
 	file { "/etc/amavis/conf.d/15-content_filter_mode":
 		ensure	=> present,
@@ -706,12 +711,13 @@ class configure_spamav {
 
 class configure_postfix {
 	include config
-	$maildb_user = $config::maildb_user
-	$maildb_pwd = $config::maildb_pwd
-	$maildb_name = $config::maildb_name
-	$certificate = $config::certificate
-	$certificate_key = $config::certificate_key
-	$mail_server_name = $config::mail_server_name
+
+	$maildb_user 		= $config::maildb_user
+	$maildb_pwd 		= $config::maildb_pwd
+	$maildb_name 		= $config::maildb_name
+	$certificate 		= $config::certificate
+	$certificate_key 	= $config::certificate_key
+	$mail_server_name 	= $config::mail_server_name
 
 	file { "/etc/postfix/mysql_virtual_alias_maps.cf":
         owner   => 'root',
@@ -816,8 +822,6 @@ class roundcube {
 		match => '.*dbname.*=.*$',
 		require => Package["roundcube"]
 	}
-	
-	
 	file_line { 'roundcube: default_host':
 		path  => "$roundcube_conf",
 		line  => "\$rcmail_config['default_host'] = 'localhost';",
