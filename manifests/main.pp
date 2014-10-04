@@ -65,6 +65,7 @@ class packages {
 	package { "git-core": 		ensure => present }
 	package { "rsyslog": 		ensure => present }
 	package { "openssh-server": ensure => present }
+	package { "sudo": 			ensure => present }
 	
 	# Roundcube
 	
@@ -683,9 +684,11 @@ class chown_dovecot_config {
 class configure_spamav {
 	include config
 
-	$maildb_user 	= $config::maildb_user
-	$maildb_pwd 	= $config::maildb_pwd
-	$maildb_name 	= $config::maildb_name
+	$maildb_user 			= $config::maildb_user
+	$maildb_pwd 			= $config::maildb_pwd
+	$maildb_name 			= $config::maildb_name
+
+	$amavis_process_count 	= $config::amavis_process_count
 
 	file { "/etc/amavis/conf.d/15-content_filter_mode":
 		ensure	=> present,
@@ -726,12 +729,13 @@ class configure_spamav {
 class configure_postfix {
 	include config
 
-	$maildb_user 		= $config::maildb_user
-	$maildb_pwd 		= $config::maildb_pwd
-	$maildb_name 		= $config::maildb_name
-	$certificate 		= $config::certificate
-	$certificate_key 	= $config::certificate_key
-	$mail_server_name 	= $config::mail_server_name
+	$maildb_user 			= $config::maildb_user
+	$maildb_pwd 			= $config::maildb_pwd
+	$maildb_name 			= $config::maildb_name
+	$certificate 			= $config::certificate
+	$certificate_key 		= $config::certificate_key
+	$mail_server_name 		= $config::mail_server_name
+	$amavis_process_count 	= $config::amavis_process_count
 
 	file { "/etc/postfix/mysql_virtual_alias_maps.cf":
         owner   => 'root',
@@ -879,7 +883,80 @@ class roundcube {
 		require => Package["php5-fpm"]
 	}
 }
+class backup_user {
+	include config
+	
+	$backup_user_allowed_key = $config::backup_user_allowed_key
 
+	$maildb_user 	= $config::maildb_user
+	$maildb_pwd 	= $config::maildb_pwd
+	$maildb_name 	= $config::maildb_name
+
+	group { "backup":
+		ensure => present,
+	}
+	user { "backup":
+		ensure		=> present,
+		comment		=> "(Mail) Backup user",
+		membership	=> minimum,
+		gid 		=> 'backup',
+		shell		=> "/bin/bash",
+		home		=> "/home/backup",
+		require		=> [Group["mail"], Group["backup"]],
+	}
+    file { '/home/backup':
+        ensure  => directory,
+        owner   => 'backup',
+        group   => 'backup',
+        mode    => 770,
+		require => User[backup],
+    }
+	
+	if $backup_user_allowed_key == "" {
+		ssh_keygen { 'vmail': 
+			home => '/var/vmail'
+		}
+		ssh_keygen { 'backup': }
+	} else {
+		ssh_keygen { 'vmail':
+			home => '/var/vmail'
+		}
+		ssh_keygen { 'backup': }
+		->
+		file { "/home/backup/.ssh/authorized_keys":
+			ensure       => present,
+			owner        => 'backup',
+			group        => 'backup',
+			mode         => 600,
+			content		=> $backup_user_allowed_key
+		}
+	}
+	
+	file { "/etc/sudoers.d/backup-user":
+		ensure		=> present,
+		owner 		=> 'root',
+		group 		=> 'root',
+		mode  		=> 440,
+		content		=> 'backup ALL=(vmail:vmail) NOPASSWD:ALL',
+		require		=> Package["sudo"]
+	}
+	file { "/home/backup/backup-to-this.sh":
+		ensure		=> present,
+		owner 		=> 'backup',
+		group 		=> 'backup',
+		mode  		=> 755,
+		content		=> template("backup-to-this.sh.erb"),
+		require		=> File["/home/backup"]
+	}
+	file { "/home/backup/.my.cnf":
+		ensure		=> present,
+		owner 		=> 'backup',
+		group 		=> 'backup',
+		mode  		=> 600,
+		content		=> template("backup-my.cnf.erb"),
+		require		=> File["/home/backup"]
+	}
+}
 include config_host
 include swap
 include make_certificate
@@ -892,6 +969,7 @@ include configure_postfix
 include config_firewall
 include config_php
 include roundcube
+include backup_user
 
 class {'configure_maildb':}
 ->

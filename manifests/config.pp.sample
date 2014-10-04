@@ -20,9 +20,20 @@ class config {
 	$mailadmin_user = "admin@$mail_server_name"
 	$mailadmin_pwd = get_password("/root/.mailadmin.pwd")
 	
+	$roundcube_user = 'roundcube'
+	$roundcube_name = 'roundcube'
+	$roundcube_pwd = get_password("/root/.roundcube.pwd")
+	
 	
 	$vimbadmin_salt1 = get_password("/root/.vimbadmin_salt1.pwd", 64)
 	$vimbadmin_salt2 = get_password("/root/.vimbadmin_salt2.pwd", 64)
 	$vimbadmin_salt3 = get_password("/root/.vimbadmin_salt3.pwd", 64)
 	
+	$restore_maildb_backup = "false"
+	#
+	# Number of processors to use for amavis (less means less memory, more means more emails at a time)
+	#
+	$amavis_process_count = 3
+	
+	$backup_user_allowed_key = ""
 }

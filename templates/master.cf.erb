@@ -124,7 +124,7 @@ mailman   unix  -       n       n       -       -       pipe
   ${nexthop} ${user}
  
 # The next two entries integrate with Amavis for anti-virus/spam checks.
-amavis      unix    -       -       -       -       3       smtp
+amavis      unix    -       -       -       -       <%= @amavis_process_count %>       smtp
   -o smtp_data_done_timeout=1200
   -o smtp_send_xforward_command=yes
   -o disable_dns_lookups=yes

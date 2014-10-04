@@ -11,7 +11,7 @@ use strict;
 # Three concurrent processes. This should fit into the RAM available on an
 # AWS micro instance. This has to match the number of processes specified
 # for Amavis in /etc/postfix/master.cf.
-$max_servers  = 3;
+$max_servers  = <%= @amavis_process_count %>;
   
 # Add spam info headers if at or above that level - this ensures they
 # are always added.
