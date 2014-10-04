@@ -63,6 +63,7 @@ class packages {
 	package { "memcached": ensure => present }
 
 	package { "git-core": ensure => present }
+	package { "rsyslog": ensure => present }
 	
 	# Roundcube
 	
@@ -122,6 +123,11 @@ class services {
 		ensure  => "running",
 		enable  => "true",
 		require => Package["php5-fpm"],
+	}
+	service { "rsyslog":
+		ensure  => "running",
+		enable  => "true",
+		require => Package["rsyslog"],
 	}
 	
 }
@@ -496,6 +502,15 @@ class configure_mail {
 	$mailadmin_user = $config::mailadmin_user
 	$mailadmin_pwd = $config::mailadmin_pwd
 
+	file { "/etc/rsyslog.d/33-dovecot.conf":
+		ensure	=> present,
+		content	=> template("rsyslog-33-dovecot.conf"),
+		require	=> Package["rsyslog"],
+		notify  => Service["rsyslog"],
+	}
+	
+	
+	
 	group { "mail":
 		ensure => present,
 	}
