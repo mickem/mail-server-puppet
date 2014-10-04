@@ -2,4 +2,5 @@ manifests/config.pp
 files/ssl/*.pem
 files/ssl/*.key
 files/backup/*.csv
+.vagrant
 

@@ -2,7 +2,12 @@
 class config {
 	$mail_server_name = "MY.FQDN.COM"
 	$generate_certificate = "true"
-	$files = "./files"
+	if $::vm_type == "vagrant" {
+		$files = "/etc/puppet/files"
+	} else {
+		$files = "./files"
+	}
+
 	$memcache_memory = "128m"
 
 	if $generate_certificate == "true" {
@@ -34,6 +39,12 @@ class config {
 	# Number of processors to use for amavis (less means less memory, more means more emails at a time)
 	#
 	$amavis_process_count = 3
+
+	#
+	# Maximum allowed email size.
+	#
+	$message_size_limit = 10240000
+
 	
 	$backup_user_allowed_key = ""
 }

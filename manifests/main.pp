@@ -1,5 +1,9 @@
+if $::vm_type == "vagrant" {
+	import "config.pp"
+}
 
 class packages {
+
 	# nginx (www)
 	package { "apache2": 		ensure => absent }
 	->
@@ -73,6 +77,10 @@ class packages {
 	package { "roundcube-mysql": 			ensure => present }
 	package { "roundcube-plugins": 			ensure => present }
 	package { "roundcube-plugins-extra": 	ensure => present }
+	
+	# DKIM
+	package { "opendkim":		ensure => present }
+	package { "opendkim-tools":	ensure => present }
 	
 	# Update before
 	exec { "apt-update":
@@ -522,6 +530,8 @@ class configure_mail {
 	
 	$mailadmin_user 	= $config::mailadmin_user
 	$mailadmin_pwd 		= $config::mailadmin_pwd
+	
+	$message_size_limit = $config::message_size_limit
 
 	file { "/etc/rsyslog.d/33-dovecot.conf":
 		ensure	=> present,
@@ -957,6 +967,7 @@ class backup_user {
 		require		=> File["/home/backup"]
 	}
 }
+
 include config_host
 include swap
 include make_certificate

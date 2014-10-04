@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = "ubuntu-trusty-64wpuppet"
+  config.vm.box_url = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/ubuntu-14.04-amd64-vbox.box"
+  config.vm.hostname = "backup.mail.server"
+  config.vm.synced_folder "../files", "/etc/puppet/files"
+  config.vm.synced_folder "../", "/setup/root"
+
+  config.ssh.forward_agent = true
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+	vb.gui = false
+  end
+  
+  config.vm.provision "shell", inline: "sh /setup/root/install_puppet.sh"
+
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "../manifests"
+	puppet.module_path    = "../modules"
+    puppet.manifest_file  = "main.pp"
+	puppet.options = "--templatedir /setup/root/templates/"
+	puppet.facter = {
+		"vm_type" => "vagrant",
+	}	
+  end
+
+end
