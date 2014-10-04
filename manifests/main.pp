@@ -64,6 +64,7 @@ class packages {
 
 	package { "git-core": 		ensure => present }
 	package { "rsyslog": 		ensure => present }
+	package { "openssh-server": ensure => present }
 	
 	# Roundcube
 	
@@ -124,6 +125,11 @@ class services {
 		enable  => "true",
 		require => Package["php5-fpm"],
 	}
+	service { "ssh":
+		ensure  => "running",
+		enable  => "true",
+		require => Package["openssh-server"],
+	}
 	service { "rsyslog":
 		ensure  => "running",
 		enable  => "true",
@@ -174,6 +180,14 @@ class config_host {
 	host { "${mail_server_name}":
 		ip           => '127.0.0.1',
 		host_aliases => "$alias",
+	}
+	
+	file_line { "ssh: disable root lgin":
+		path    => '/etc/php5/fpm/php.ini',
+		line    => 'set PermitRootLogin no',
+		match   => '^.*set PermitRootLogin .*$',
+		notify  => Service["ssh"],
+		require => Package['openssh-server'],
 	}
 }
 
