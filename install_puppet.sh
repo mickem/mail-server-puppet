@@ -7,8 +7,8 @@ if ! which puppet > /dev/null; then
 	sudo apt-get --assume-yes install puppet 
 fi;
 if [ ! -h /usr/share/puppet/modules ]; then 
-	sudo ln -s /etc/puppet/modules /usr/share/puppet/modules
+	sudo ln -s /usr/share/puppet/modules /etc/puppet/modules
 fi
 if [ ! -d /etc/puppet/modules/stdlib ]; then
-	sudo apt-get --assume-yes install puppet-module-puppetlabs-stdlib
+	sudo puppet module install puppetlabs-stdlib
 fi

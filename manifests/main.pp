@@ -1,5 +1,5 @@
 if $::vm_type == "vagrant" {
-	import "config.pp"
+#	import "config.pp"
 }
 
 class packages {
@@ -530,8 +530,6 @@ class configure_mail {
 	
 	$mailadmin_user 	= $config::mailadmin_user
 	$mailadmin_pwd 		= $config::mailadmin_pwd
-	
-	$message_size_limit = $config::message_size_limit
 
 	file { "/etc/rsyslog.d/33-dovecot.conf":
 		ensure	=> present,
@@ -746,6 +744,7 @@ class configure_postfix {
 	$certificate_key 		= $config::certificate_key
 	$mail_server_name 		= $config::mail_server_name
 	$amavis_process_count 	= $config::amavis_process_count
+	$message_size_limit		= $config::message_size_limit
 
 	file { "/etc/postfix/mysql_virtual_alias_maps.cf":
         owner   => 'root',
