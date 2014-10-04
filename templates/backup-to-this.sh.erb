@@ -1,0 +1,9 @@
+#!/bin/sh
+TARGET=$1
+SYSTEM_USER=backup
+MAIL_USER=vmail
+
+for f in `mysql -BN -umail mail -e "select username from mailbox;"` ; do
+	echo "Running backup for: $f"
+	sudo -u $MAIL_USER /usr/bin/dsync -u $f -R backup ssh $SYSTEM_USER@$TARGET sudo -u $MAIL_USER /usr/bin/dsync -u $f
+done
